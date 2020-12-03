@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <property name="LOG_FILE" value="./logs/app.log"/>
+    <springProfile name="prod">
+        <appender name="FILE"
+                  class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}.%M\(%line\) - %msg%n</pattern>
+                <!--设置编码-->
+                <charset>UTF-8</charset>
+            </encoder>
+            <file>${LOG_FILE}</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+               <FileNamePattern>
+                  <fileNamePattern>./logs/%d{yyyy-MM-dd}/app.log_%d{yyyy-MM-dd}_%i.zip</fileNamePattern>
+               </FileNamePattern>
+               <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                  <maxFileSize>100MB</maxFileSize>
+               </timeBasedFileNamingAndTriggeringPolicy>
+            </rollingPolicy>
+        </appender>
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}.%M\(%line\) - %msg%n</pattern>
+                <!--设置编码-->
+                <charset>UTF-8</charset>
+            </encoder>
+        </appender>
+        <logger name="com.ai.toptea" level="INFO"/>
+        <root level="INFO">
+            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="FILE" />
+        </root>
+    </springProfile>
+    <springProfile name="dev">
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}.%M\(%line\) - %msg%n</pattern>
+                <!--设置编码-->
+                <charset>UTF-8</charset>
+            </encoder>
+        </appender>
+        <logger name="org.xynok" level="INFO"/>
+        <root level="INFO">
+            <appender-ref ref="CONSOLE" />
+        </root>
+    </springProfile>
+</configuration>
