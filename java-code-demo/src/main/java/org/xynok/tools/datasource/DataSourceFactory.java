@@ -3,6 +3,7 @@ package org.xynok.tools.datasource;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Map;
@@ -15,6 +16,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.core.ResolvableType;
 import org.springframework.core.env.Environment;
+import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,7 +34,7 @@ import org.springframework.boot.context.properties.bind.handler.IgnoreTopLevelCo
 
 @SuppressWarnings("unchecked")
 @Slf4j
-class DataSourceFactory implements IDataSourceFactory{
+public class DataSourceFactory implements IDataSourceFactory{
     /** 环境变量 */
     protected Environment env;
     /**数据源工厂 */
@@ -165,5 +167,23 @@ class DataSourceFactory implements IDataSourceFactory{
             dataSource=createDataSource(properties,properties.getType());
         }
         return dataSource;
+    }
+
+
+    /** 多数据源切换，获取实际的数据源 */
+    public static DataSource getTargetDataSource(DataSource dataSource)
+            throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        if (dataSource instanceof AbstractRoutingDataSource) {
+            Class clz = dataSource.getClass();
+            // 因为determineTargetDataSource在AbstractRoutingDataSource类中，需要回溯到这个类上面
+            while (clz != AbstractRoutingDataSource.class) {
+                clz = clz.getSuperclass();
+            }
+            Method method = clz.getDeclaredMethod("determineTargetDataSource");
+            method.setAccessible(true);
+            return (DataSource) method.invoke(dataSource);
+        } else {
+            return dataSource;
+        }
     }
 }

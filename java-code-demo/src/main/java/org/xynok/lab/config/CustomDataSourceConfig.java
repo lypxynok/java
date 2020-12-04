@@ -9,10 +9,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 import org.xynok.tools.datasource.CustomDataSource;
-import org.xynok.tools.datasource.DataSourceHelper;
-import org.xynok.tools.datasource.RoutingDataSource;
+import org.xynok.tools.datasource.DataSourceFactory;
 
 /**
  * 自定义数据源配置
@@ -24,7 +22,7 @@ public class CustomDataSourceConfig {
     @Primary
     JdbcTemplate defaultJdbcTemplate(DataSource dataSource) throws SQLException {
         try{
-            return new JdbcTemplate(DataSourceHelper.getTargetDataSource(dataSource));
+            return new JdbcTemplate(DataSourceFactory.getTargetDataSource(dataSource));
         }catch(Exception e){
             throw new SQLException(e.getCause());
         }
@@ -35,7 +33,7 @@ public class CustomDataSourceConfig {
     @Qualifier("cus1")
     JdbcTemplate cus1JdbcTemplate(DataSource dataSource) throws SQLException{
         try{
-            return new JdbcTemplate(DataSourceHelper.getTargetDataSource(dataSource));
+            return new JdbcTemplate(DataSourceFactory.getTargetDataSource(dataSource));
         }catch(Exception e){
             throw new SQLException(e.getCause());
         }
@@ -46,7 +44,7 @@ public class CustomDataSourceConfig {
     @Qualifier("cus2")
     JdbcTemplate cus2JdbcTemplate(DataSource dataSource) throws SQLException {
         try{
-            return new JdbcTemplate(DataSourceHelper.getTargetDataSource(dataSource));
+            return new JdbcTemplate(DataSourceFactory.getTargetDataSource(dataSource));
         }catch(Exception e){
             throw new SQLException(e.getCause());
         }
