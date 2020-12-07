@@ -269,6 +269,7 @@ public class TimeUtil {
      * @param timeLists  要合并的时间串列表，可以多个
      * @return
      */
+    @SafeVarargs
     public static List<String> combineTime(String fmtStrFrom, String fmtStrTo, List<String>... timeLists) {
         return combineTime(fmtStrFrom, fmtStrTo,false, timeLists);
     }
@@ -281,6 +282,7 @@ public class TimeUtil {
      * @param timeLists  要合并的时间串列表，可以多个
      * @return
      */
+    @SafeVarargs
     public static List<String> combineTime(String fmtStrFrom, String fmtStrTo,boolean descFlag, List<String>... timeLists) {
         int len = timeLists.length;
         if (len == 0) {

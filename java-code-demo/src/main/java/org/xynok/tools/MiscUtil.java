@@ -58,6 +58,7 @@ public final class MiscUtil {
     }
 
     /**序列化的字节数组反序列化成对象 */
+    @SuppressWarnings({"unchecked"})
     public static <T> T deserialize(byte[] bytes) throws IOException, ClassNotFoundException {
         // 字节输入流
         ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
@@ -125,6 +126,7 @@ public final class MiscUtil {
     }
 
     /** 浅克隆 */
+    @SuppressWarnings({"unchecked"})
     public static<T> T clone(T src){
        return (T)copy(src,src.getClass());
     }
