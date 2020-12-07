@@ -174,10 +174,13 @@ public class DataSourceFactory implements IDataSourceFactory{
     public static DataSource getTargetDataSource(DataSource dataSource)
             throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         if (dataSource instanceof AbstractRoutingDataSource) {
-            Class clz = dataSource.getClass();
+            Class<?> clz = dataSource.getClass();
             // 因为determineTargetDataSource在AbstractRoutingDataSource类中，需要回溯到这个类上面
-            while (clz != AbstractRoutingDataSource.class) {
+            while (clz != AbstractRoutingDataSource.class && clz!=Object.class) {
                 clz = clz.getSuperclass();
+            }
+            if(clz==Object.class){
+                return dataSource;
             }
             Method method = clz.getDeclaredMethod("determineTargetDataSource");
             method.setAccessible(true);
