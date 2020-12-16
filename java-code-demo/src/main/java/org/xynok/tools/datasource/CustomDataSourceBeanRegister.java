@@ -59,7 +59,6 @@ public class CustomDataSourceBeanRegister extends CustomDataSourceBeanBase imple
            log.error("注册自定义数据源失败:{}",e.getMessage(),e);
            throw new IllegalAccessError(String.format("注册自定义数据源失败:%s",e));
         }
-        ImportBeanDefinitionRegistrar.super.registerBeanDefinitions(importingClassMetadata, registry);
     }
 
     @Override
